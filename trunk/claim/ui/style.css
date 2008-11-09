@@ -1,0 +1,21 @@
+/* Style the comment box to show that claims are active */
+
+form#commentform input#url {
+    width: 152px;
+}
+
+form#commentform input#url {
+    background-image: url(flag_desat.png);
+    background-repeat: no-repeat;
+    background-position: 2px center;
+    padding-left: 20px;
+}
+
+form#commentform input#url:hover,
+form#commentform input#url:focus {
+    background-image: url(flag.png);
+}
+
+form#commentform div#claim-brag {
+}
+

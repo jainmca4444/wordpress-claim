@@ -1,0 +1,101 @@
+=Claim Protocol Technical Specification
+
+This document describes the claim protocol. The claim protocol informs blogs that their owners have authored artifacts on other sites. For example, it allows website A to tell website B that A contains a comment authored by B's owner. Website B can then show a list of remote comments. 
+
+
+=Motivating Use Case
+
+The claim protocol facilitates the following use case:
+
+1. Blogger Erigami sees an interesting post on the CheeseDoodle.com blog, 
+and decides comment on it. 
+2. When Erigami enters his identity for the CD blog comment, he enters the URL 
+of his blog: http://piepalace.ca/blog. 
+3. The Cheese Doodle blog informs PiePalace.ca that has received (and approved)
+a comment from Erigami. 
+4. PiePalace.ca displays a link to Erigami's comment on the CD blog. Readers 
+of PiePalace.ca can chase the link and read something that may (or may not) 
+be of interest. 
+
+
+=Protocol
+
+The claim protocol is similar to the <a href="http://www.sixapart.com/pronet/docs/trackback_spec">trackback mechanism<a/>, in that it uses an RPC-over-HTTP-like mechanism for two blogs to communicate.  
+
+In the protocol there are three actors: a human comment author, the commented blog, and the owner's blog. The commented blog has a comment that is of interest to the owner's blog. The owner's blog wants to display a link to that comment. 
+
+<pre>
+                       Commented Blog                         Owner's Blog
+                             |                                      |
+1. -- Comment submission --} |                                      |
+                             v                                      |
+2.                    Validate comment                              |
+[Discovery]                  |                                      |
+3.                           |------------- Query for Claim URI --} |
+                             |                                      |
+4.                           | {-- Claim service URI ---------------|
+                             |                                      |
+[Transmission]               |                                      |
+5.                           |------------- Submit item details --} |
+                             |                                      v
+6.                           |                           Validate claim syntax
+                             |                                      |
+7.                           | {-- Respond -------------------------|
+                             |                                      |
+</pre>
+
+This scenario starts with the user (1) submitting a comment to the Commented Blog and (2) validating that is fit to be posted. The Commented Blog then performs two steps: discovery of the claim URI for the given blog, and transmission of the claim.
+
+The claim URI is discovered by downloading the blog's main page searching it for a special <tt>link</tt> tag. The (3) download takes the form of an HTTP(s) GET request from the Commented Blog to the URI submitted with the comment. The Owner's Blog (4) replies with its usual front-page content, which must include a <tt>link</tt> tag with a <tt>rel</tt> of "claim" and an <tt>href</tt> of the claim URI. The Commented Blog finds that URI and moves on to the transmission step.
+
+The transmission step sends the details of the claim to the Owner's Blog. The Commented Blog (5) sends an HTTP(s) GET or POST request to the discovered URI. The Owner's Blog (6) checks that the claim has the appropriate fields, and (7) sends a response. The response is carried in a normal HTTP 200 response, but with the first line of the form <tt>### - Reason</tt>, where ### is an HTTP response code, and <i>Reason</i> is a human-meaningful explanation of the response. 
+
+At the end of this interaction, the Commented Blog MAY notify the user from (1) that a claim has been submitted. The Owner's Blog is expected to store the claim so that the user can validate it. After validation, the Owner's Blog will presumably show a link to the comment. 
+
+
+=Claim Payload
+
+The claim submission in Step 5 should include the following fields:
+<dl>
+  <dt>charset</dt>
+    <dd>The ISO character set of the value of each of the following fields.</dd>
+
+  <dt>type</dt>
+    <dd>The type of claim request. For this version, only "comment" is allowed.</dd>
+  
+  <dt>blog_name</dt>
+    <dd>The human meaningful name of the Commented Blog. Limited to 100 characters.</dd>
+
+  <dt>blog_url</dt>
+    <dd>The URL of the Commented Blog. Limited to 255 characters.</dd>
+
+  <dt>title</dt>
+    <dd>The title of the blog post that the user commented on. Limited to 100 characters.</dd>
+
+  <dt>url</dt>
+    <dd>The URI of the item being claimed.</dd>
+
+  <dt>email</dt>
+    <dd>The email address of the user. Of the form <tt>username@host</tt>.</dd>
+
+  <dt>excerpt</dt>
+    <dd>A short human meaningful excerpt of the comment.</dd>
+</dl>
+
+Note that a claim that has a type other than "comment" should not be expected to have any fields. Other types may become available in future versions of this specification.
+
+Keys of a claim request should be encoded in ASCII. 
+
+
+=Implementation
+
+This specification is released with a sample specification for Wordpress. 
+
+
+=History
+
+- 1.0.0 - Basic specification
+
+
+=Authors
+- Erigami Scholey-Fuller (erigami@piepalace.ca)
