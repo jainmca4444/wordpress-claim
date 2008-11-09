@@ -17,6 +17,7 @@ CREATE TABLE `wp_claims` (
     `ip` varchar(15) NOT NULL,
     `title` varchar(100) NOT NULL, 
     `blog_name` varchar(100) NOT NULL,
+    `blog_url` varchar(256) NOT NULL,
     `type` varchar(10) NOT NULL,
     `item` varchar(255) NOT NULL, 
     `email` varchar(255) NOT NULL, 
@@ -57,17 +58,11 @@ function _clm_add_manage_page() {
 }
 
 /** Called when a comment's status changes. */
-function _clm_comment_change($id, $newStatus=null) {
-    if ($newStatus != 'approve') {
-        // We only care about approved comments
-        return;
+function _clm_comment_post($id, $newState) {
+    if (strcmp($newState, 'approve') == 0 || $newState === 1) {
+        clm_loadSib('/comment.php');
+        _clm_comment_submit_claim($id);
     }
-
-    // Load the comment stuff
-    $commentFile = dirname(__FILE__) . '/comment.php';
-    require($commentFile);
-
-    _clm_comment_submit_claim($id, $newStatus);
 }
 
 /** Called to insert our link tag. */
@@ -84,8 +79,8 @@ function clm_loadSib($name) {
 }
 
 add_action('admin_menu', '_clm_add_manage_page');
-add_action('wp_set_comment_status', '_clm_comment_change');
-add_action('comment_post', '_clm_comment_change');
+add_action('wp_set_comment_status', '_clm_comment_post', 10, 3);
+add_action('comment_post', '_clm_comment_post', 10, 3);
 add_action('wp_head', '_clm_wp_head');
 
 

@@ -13,10 +13,21 @@ Roadmap:
 0.5.2 - Theme: Usability
 # Show claim icon (?!) by URL in comment form
 # Show pending claims in dashboard
-- Send email to blog owner when claim submitted
+# Send email to blog owner when claim submitted
+- Prevent blog from claiming its own comments
+
+0.5.4 - Theme: Management improvements
+- Allow claim to be marked as spam
+- Hide claim spam in the management menu
+- AJAXify claim approval
+- Allow multi-select on claim approval
+
+0.5.6 - Theme: Polish
+- Create database table on installation
 - Show claim submission status in WP comment form
 - Prevent duplicate claims from being accepted
 
-0.5.4 - Theme: Claim display
+0.5.8 - Theme: Claim display
 - Show claims in RSS feed
 - Provide claim-only RSS feed
+
