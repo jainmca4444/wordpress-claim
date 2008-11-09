@@ -1,0 +1,22 @@
+
+Roadmap:
+
+0.5.0 - Theme: Claim submission and approval
+# Find claim URL on other site
+# Submit claim when a comment is approved
+# Show list of claims for logged-in user
+# Approve/disapprove claim
+# Doc claim fields/types
+# Doc claim protocol
+# Claim widget
+
+0.5.2 - Theme: Usability
+# Show claim icon (?!) by URL in comment form
+# Show pending claims in dashboard
+- Send email to blog owner when claim submitted
+- Show claim submission status in WP comment form
+- Prevent duplicate claims from being accepted
+
+0.5.4 - Theme: Claim display
+- Show claims in RSS feed
+- Provide claim-only RSS feed
