@@ -42,6 +42,7 @@ if ($charset) {
 
 $title = stripslashes($_REQUEST['title']);
 $blog_name = stripslashes($_REQUEST['blog_name']);
+$blog_url = stripslashes($_REQUEST['blog_url']);
 $type = stripslashes($_REQUEST['type']);
 $item = stripslashes($_REQUEST['item']);
 $email = stripslashes($_REQUEST['email']);
@@ -55,6 +56,7 @@ if ( function_exists('mb_convert_encoding') ) { // For international trackbacks
 
 $title = $wpdb->escape(strip_tags($title));
 $blog_name = $wpdb->escape(strip_tags($blog_name));
+$blog_url = $wpdb->escape(strip_tags($blog_url));
 $type = $wpdb->escape(strip_tags($type));
 $item = $wpdb->escape(strip_tags($item));
 $email = $wpdb->escape(strip_tags($email));
@@ -69,6 +71,10 @@ if (strlen($title) < 1) {
 
 if (strlen($blog_name) < 1) {
     die("400 - Need a blog_name");
+}
+
+if (strlen($blog_url) < 1) {
+    die("400 - Need a blog_url");
 }
 
 if (strlen($type) < 1) {
@@ -92,6 +98,7 @@ if (strlen($url) < 1) {
 $claim = array(
     'title' => $title,
     'blog_name' => $blog_name,
+    'blog_url' => $blog_url,
     'type' => $type,
     'item' => $item,
     'email' => $email,
@@ -102,8 +109,21 @@ $claim = array(
 
 do_action('claim_request', $claim);
 
-$wpdb->query("INSERT INTO $table SET ip='$ip', title='$title', blog_name='$blog_name', type='$type', item='$item', email='$email', excerpt='$excerpt', url='$url', time=NOW(), state='unapproved'");
+$wpdb->query("INSERT INTO $table SET ip='$ip', title='$title', blog_name='$blog_name', blog_url='$blog_url', type='$type', item='$item', email='$email', excerpt='$excerpt', url='$url', time=NOW(), state='unapproved'");
 
 print("200 - Claim provisionally accepted");
 
+// Try to email the claim owner
+$user = get_user_by_email($email);
+
+if ($user === false) {
+    die();
+}
+
+wp_mail(
+    $email,  
+    sprintf(__('[%s] claim from %s'), get_option('blogname'), $blog_name),
+    sprintf(__('A claim request has been received from %s. To approve or deny it, go to %s/wp-content/plugins/claim/manage.php'), $blog_name, get_option('wpurl'))
+);
+    
 ?>

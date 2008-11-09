@@ -1,6 +1,23 @@
 <?php
 /* FILE: Widget showing claims. */
 
+function _clm_trimStart($start, $string) {
+    if (strpos($string, $start) === 0) {
+        return substr($string, strlen($start));
+    }
+
+    return $string;
+}
+
+function _clm_simplify_url($url) {
+    $url = _clm_trimStart('http://', $url);
+    $url = _clm_trimStart('https://', $url);
+    $url = _clm_trimStart("www.", $url);
+
+    return $url;
+}
+
+
 /** Show the claim widget. */
 function _claim_widget($args) {
     extract($args);
@@ -41,8 +58,13 @@ function _claim_widget_show_claims($maxClaims) {
         print '<ul class="claim-list">';
     }
 
+    $mySimpleUrl = _clm_simplify_url(get_bloginfo('wpurl'));
+
     $i = 0;
     foreach ($rows as $row) {
+        if (_clm_simplify_url($row->blog_url) == $mySimpleUrl) {
+            continue;
+        }
 ?>
         <li class="comment-claim claim-type-<?= $row->type ?>">
                 <a href="<?= $row->url ?>" rel="nofollow">

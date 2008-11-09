@@ -1,14 +1,13 @@
 <?php
 /* FILE: Handles new comments. Makes them claimable. */
 
-
 /** Called to indicate that the given comment deserves a claim. */
-function _clm_comment_submit_claim($id, $newStatus) {
+function _clm_comment_submit_claim($id) {
     $comment = get_comment($id, 'OBJECT');
 
     // Verify that we have enough information to claim
     $blog = $comment->comment_author_url;
-    
+
     if (strlen($blog) < 8) {
         // Nope. Doesn't look like a decent URL
         return;
@@ -29,6 +28,7 @@ function _clm_comment_submit_claim($id, $newStatus) {
     $request = array(
         'title' => $post->post_title, 
         'blog_name' => get_bloginfo('name'),
+        'blog_url' => get_bloginfo('wpurl'),
         'type' => 'comment',
         'item' => '',
         'email' => $comment->comment_author_email,
