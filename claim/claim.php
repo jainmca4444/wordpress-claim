@@ -3,7 +3,7 @@
 Plugin Name: Claim
 Plugin URI: http://piepalace.ca/blog/projects/claim
 Description: Allow other sites to register comments you have created. 
-Version: 0.1.0 (Anguished Anteater) 
+Version: 1.0.0 (Great Escape) 
 Author: Erigami Scholey-Fuller
 Author URI: http://piepalace.ca/blog/
 */
@@ -12,28 +12,6 @@ Author URI: http://piepalace.ca/blog/
 
 /*
 SQL:
-CREATE TABLE `wp_claims` (
-    `claim_ID` bigint(20) unsigned NOT NULL auto_increment,
-    `ip` varchar(15) NOT NULL,
-    `title` varchar(100) NOT NULL, 
-    `blog_name` varchar(100) NOT NULL,
-    `blog_url` varchar(256) NOT NULL,
-    `type` varchar(10) NOT NULL,
-    `item` varchar(255) NOT NULL, 
-    `email` varchar(255) NOT NULL, 
-    `excerpt` varchar(255) NOT NULL, 
-    `url` varchar(255) NOT NULL, 
-    `local` boolean NOT NULL, 
-    `time` datetime NOT NULL,
-    `state` ENUM('unapproved', 'spam', 'approved', 'denied'),
-    `user_id` bigint(20) NOT NULL,
-    PRIMARY KEY (`claim_ID`),
-    KEY `ip` (`ip`), 
-    KEY `time` (`time`),
-    KEY `state` (`state`),
-    KEY `user_id` (`user_id`),
-    KEY `local` (`local`)
-);
 */
 
 /**
@@ -49,6 +27,46 @@ function &claim_tally() {
 
     return (object)$o;
 }
+
+
+/** Called on plugin activation. Does initial table creation. */
+function _clm_install() {
+    global $wpdb;
+    $table = $wpdb->prefix . "claims";
+
+    if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+        // Install our table.
+        $sql = <<<SQL
+CREATE TABLE `$table` (
+    `claim_ID` bigint(20) unsigned NOT NULL auto_increment,
+    `ip` varchar(15) NOT NULL,
+    `title` varchar(100) NOT NULL, 
+    `blog_name` varchar(100) NOT NULL,
+    `blog_url` varchar(256) NOT NULL,
+    `type` varchar(10) NOT NULL,
+    `item` varchar(255) NOT NULL, 
+    `email` varchar(255) NOT NULL, 
+    `excerpt` varchar(255) NOT NULL, 
+    `url` varchar(255) NOT NULL, 
+    `local` boolean NOT NULL, 
+    `time` datetime NOT NULL,
+    `state` ENUM('unapproved', 'spam', 'approved', 'denied'),
+    `user_id` bigint(20) NOT NULL,
+    PRIMARY KEY  (`claim_ID`),
+    KEY `ip` (`ip`), 
+    KEY `time` (`time`),
+    KEY `state` (`state`),
+    KEY `user_id` (`user_id`),
+    KEY `local` (`local`)
+);
+SQL;
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+
+        add_option('claim_db_version', '1.0.0');
+    }
+}
+register_activation_hook(__FILE__, '_clm_install');
 
 
 /** Called to display the admin page. */
