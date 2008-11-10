@@ -10,12 +10,12 @@ Roadmap:
 # Doc claim protocol
 # Claim widget
 
-0.5.2 - Theme: Usability
+1.0.0 - Theme: Usability
 # Show claim icon (?!) by URL in comment form
 # Show pending claims in dashboard
 # Send email to blog owner when claim submitted
 # Allow the user to prevent widget from showing its own comments
-- Create database table on installation
+# Create database table on installation
 
 1.0.2 - Theme: Management improvements
 - Allow claim to be marked as spam
