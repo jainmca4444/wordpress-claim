@@ -121,11 +121,7 @@ if (strlen($url) < 1) {
 $mySimpleUrl = _clm_simplify_url(get_bloginfo('wpurl'));
 $remoteSimpleUrl = _clm_simplify_url($blog_url);
 
-print "mine: $mySimpleUrl<br/>";
-print "remo: $remoteSimpleUrl<br/>";
-
 $local = (strcasecmp($remoteSimpleUrl, $mySimpleUrl) == 0) ? '1' : '0';
-print "local: $local";
 
 // Write the claim request
 $claim = array(
