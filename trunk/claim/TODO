@@ -17,7 +17,11 @@ Roadmap:
 # Allow the user to prevent widget from showing its own comments
 # Create database table on installation
 
-1.0.2 - Theme: Management improvements
+1.0.2 - Theme: Wordpress 2.7
+- Update UI to WP 2.7 (issue 6)
+- Update unapproved claim notification to use any hooks provided in 2.7 (issue 7)
+
+1.0.4 - Theme: Management improvements
 - Allow claim to be marked as spam
 - Hide claim spam in the management menu
 - AJAXify claim approval
@@ -25,12 +29,12 @@ Roadmap:
 - Allow claim to be deleted
 - Show orphan claims
 
-1.0.4 - Theme: Polish
+1.0.6 - Theme: Polish
 - Show claim submission status in WP comment form
 - Prevent duplicate claims from being accepted
 - Handle status of many comments changing at once: send multiple claims in one request
 
-1.0.6 - Theme: Claim display
+1.0.8 - Theme: Claim display
 - Show claims in RSS feed
 - Provide claim-only RSS feed
 
