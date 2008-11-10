@@ -23,6 +23,7 @@ CREATE TABLE `wp_claims` (
     `email` varchar(255) NOT NULL, 
     `excerpt` varchar(255) NOT NULL, 
     `url` varchar(255) NOT NULL, 
+    `local` boolean NOT NULL, 
     `time` datetime NOT NULL,
     `state` ENUM('unapproved', 'spam', 'approved', 'denied'),
     `user_id` bigint(20) NOT NULL,
@@ -30,7 +31,8 @@ CREATE TABLE `wp_claims` (
     KEY `ip` (`ip`), 
     KEY `time` (`time`),
     KEY `state` (`state`),
-    KEY `user_id` (`user_id`)
+    KEY `user_id` (`user_id`),
+    KEY `local` (`local`)
 );
 */
 
@@ -82,6 +84,7 @@ add_action('admin_menu', '_clm_add_manage_page');
 add_action('wp_set_comment_status', '_clm_comment_post', 10, 3);
 add_action('comment_post', '_clm_comment_post', 10, 3);
 add_action('wp_head', '_clm_wp_head');
+add_action('admin_head', '_clm_wp_head');
 
 
 function _clm_comment_form() {

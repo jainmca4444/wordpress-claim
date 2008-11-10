@@ -16,6 +16,13 @@ form#commentform input#url:focus {
     background-image: url(flag.png);
 }
 
-form#commentform div#claim-brag {
+
+/* Admin widget */
+div#claim-include-local div.option {
+    margin-left: 6ex;
+    text-indent: -4ex;
 }
 
+p + div#claim-include-local {
+    margin-top: -.75em;
+}

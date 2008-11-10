@@ -3,6 +3,30 @@
 
 require_once('../../../wp-config.php');
 
+
+function _clm_trimStart($start, $string) {
+    if (strpos($string, $start) === 0) {
+        return substr($string, strlen($start));
+    }
+
+    return $string;
+}
+
+function _clm_simplify_url($url) {
+    $url = trim($url);
+    $url = _clm_trimStart('http://', $url);
+    $url = _clm_trimStart('https://', $url);
+    $url = _clm_trimStart("www.", $url);
+
+    if ($url[-1] == '/') {
+        $url = substr($url, 0, strlen($url) - 1);
+    }
+
+    return $url;
+}
+
+
+
 // Verify that we're allowed to run
 if (!in_array('claim/claim.php', (get_option('active_plugins')))) {
     die('Claim plugin not active');
@@ -93,6 +117,15 @@ if (strlen($url) < 1) {
     die("400 - Need an url");
 }
 
+// Determine if the claim is local
+$mySimpleUrl = _clm_simplify_url(get_bloginfo('wpurl'));
+$remoteSimpleUrl = _clm_simplify_url($blog_url);
+
+print "mine: $mySimpleUrl<br/>";
+print "remo: $remoteSimpleUrl<br/>";
+
+$local = (strcasecmp($remoteSimpleUrl, $mySimpleUrl) == 0) ? '1' : '0';
+print "local: $local";
 
 // Write the claim request
 $claim = array(
@@ -104,12 +137,13 @@ $claim = array(
     'email' => $email,
     'excerpt' => $excerpt,
     'url' => $url,
-    'ip' => $ip
+    'ip' => $ip,
+    'local' => $local
 );
 
 do_action('claim_request', $claim);
 
-$wpdb->query("INSERT INTO $table SET ip='$ip', title='$title', blog_name='$blog_name', blog_url='$blog_url', type='$type', item='$item', email='$email', excerpt='$excerpt', url='$url', time=NOW(), state='unapproved'");
+$wpdb->query("INSERT INTO $table SET ip='$ip', title='$title', blog_name='$blog_name', blog_url='$blog_url', type='$type', item='$item', email='$email', excerpt='$excerpt', url='$url', local=$local, time=NOW(), state='unapproved'");
 
 print("200 - Claim provisionally accepted");
 
