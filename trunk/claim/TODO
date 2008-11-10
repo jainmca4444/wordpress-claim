@@ -15,22 +15,22 @@ Roadmap:
 # Show pending claims in dashboard
 # Send email to blog owner when claim submitted
 # Allow the user to prevent widget from showing its own comments
-- Show orphan claims
+- Create database table on installation
 
-0.5.4 - Theme: Management improvements
+1.0.2 - Theme: Management improvements
 - Allow claim to be marked as spam
 - Hide claim spam in the management menu
 - AJAXify claim approval
 - Allow multi-select on claim approval
 - Allow claim to be deleted
+- Show orphan claims
 
-0.5.6 - Theme: Polish
-- Create database table on installation
+1.0.4 - Theme: Polish
 - Show claim submission status in WP comment form
 - Prevent duplicate claims from being accepted
 - Handle status of many comments changing at once: send multiple claims in one request
 
-0.5.8 - Theme: Claim display
+1.0.6 - Theme: Claim display
 - Show claims in RSS feed
 - Provide claim-only RSS feed
 
