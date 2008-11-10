@@ -14,7 +14,7 @@ Roadmap:
 # Show claim icon (?!) by URL in comment form
 # Show pending claims in dashboard
 # Send email to blog owner when claim submitted
-- Prevent blog from claiming its own comments
+# Allow the user to prevent widget from showing its own comments
 - Show orphan claims
 
 0.5.4 - Theme: Management improvements
