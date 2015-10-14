@@ -1,0 +1,1 @@
+Allows a Wordpress blog to show its owner's comments on other blogs.
